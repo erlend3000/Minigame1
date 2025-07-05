@@ -198,20 +198,6 @@ function gameLoop(ctx) {
     }
 }
 function handleKeyDown(e) {
-    if (!gameActive) {
-        if (e.key === "1") {
-            gameActive = true;
-            gameStart = performance.now();
-            paddleX = CANVAS_WIDTH / 2 - BOX_WIDTH / 2;
-            paddleVX = 0;
-            smallTextX = CANVAS_WIDTH / 2;
-            smallTextVX = 0;
-            balls = [];
-            lastSpawnTime = performance.now();
-            spawnInterval = 1800;
-        }
-        return;
-    }
     if (e.key === "ArrowLeft" || e.key === "a")
         keyLeft = true;
     if (e.key === "ArrowRight" || e.key === "s")
@@ -243,15 +229,20 @@ function main() {
     window.addEventListener("keyup", handleKeyUp);
     window.addEventListener("resize", function () {
         resizeCanvas();
-        // Recenter paddle and small text if needed (keep relative position)
-        if (!gameActive) {
-            paddleX = CANVAS_WIDTH / 2 - BOX_WIDTH / 2;
-            smallTextX = CANVAS_WIDTH / 2;
-        }
+        // Recenter paddle and small text (keep relative position)
+        paddleX = CANVAS_WIDTH / 2 - BOX_WIDTH / 2;
+        smallTextX = CANVAS_WIDTH / 2;
     });
-    // Initial paddle/small text position
+    // Start game immediately:
+    gameActive = true;
+    gameStart = performance.now();
     paddleX = CANVAS_WIDTH / 2 - BOX_WIDTH / 2;
+    paddleVX = 0;
     smallTextX = CANVAS_WIDTH / 2;
+    smallTextVX = 0;
+    balls = [];
+    lastSpawnTime = performance.now();
+    spawnInterval = 1800;
     function loop() {
         gameLoop(ctx);
         requestAnimationFrame(loop);
